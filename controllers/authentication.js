@@ -1,7 +1,6 @@
 const User = require('../models/user')
 
 exports.signup = (req, res, next) => {
-    console.log(req.body)
     const email = req.body.email
     const password = req.body.password
 
