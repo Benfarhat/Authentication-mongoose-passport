@@ -5,6 +5,17 @@ const bodyParser = require('body-parser')
 const morgan = require('morgan')
 const app = express()
 const router = require('./router')
+const mongoose = require('mongoose')
+
+// @see: https://developer.mozilla.org/en-US/docs/Learn/Server-side/Express_Nodejs/mongoose
+// DB Setup
+//Set up default mongoose connection
+const mongoDBURL = 'mongodb://127.0.0.1/auth';
+mongoose.connect(mongoDBURL);
+//Get the default connection
+const db = mongoose.connection;
+//Bind connection to error event (to get notification of connection errors)
+db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
 // App Setup
 // -- logger middleware
