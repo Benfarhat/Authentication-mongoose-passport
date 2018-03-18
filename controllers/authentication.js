@@ -4,6 +4,11 @@ exports.signup = (req, res, next) => {
     console.log(req.body)
     const email = req.body.email
     const password = req.body.password
+
+    if (!email || !password) {
+        // 422 Unprocessable Entity
+        return res.status(422).send({ error: 'You must provide email and password' })
+    }
     
     // Check if a user with a given email exists?
     User.findOne({email}, (err, existingUser) => {
