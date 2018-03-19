@@ -49,13 +49,12 @@ const localLogin = new LocalStrategy(localOptions, (email, password, done) => {
             // When comparing password on signing in: NO DECRYPTION!!!
             // We check if:
             // [Salt] + [Submitted Password] = [Hashed Password]
-            User.comparePassword(password, (err, isMatch) => {
+            user.comparePassword(password, function(err, isMatch) {
                 if(err) { return done(err) }
                 if(!isMatch) { return done(null, false) }
 
                 return done(null, user)
             })
-            done(null, false) 
         }
     })
 

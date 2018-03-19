@@ -31,11 +31,12 @@ userSchema.pre('save', function(next) {
     })
   });
 
-userSchema.methods.comparePassword = (candidatePassword, callback) => {
-    bcrypt.compare(candidatePassword, this.password, (err, isMatch) => {
-        if (err) { return callback(err) }
+userSchema.methods.comparePassword = function(candidatePassword, callback) {
+    // @see: https://www.npmjs.com/package/bcrypt#to-check-a-password
 
-        callback(null, isMatch)
+    bcrypt.compare(candidatePassword, this.password, function(err, isMatch) {
+        if (err) { return callback(err) }
+        return callback(null, isMatch)
     })
 }
 

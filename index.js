@@ -19,7 +19,7 @@ db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
 // App Setup
 // -- logger middleware
-app.use(morgan('combined')) // available options are: tiny / short / dev / common / combined
+//app.use(morgan('combined')) // available options are: tiny / short / dev / common / combined
 // -- BodyParser middleware
 app.use(bodyParser.json({ type: '*/*'}))
 // route handler
