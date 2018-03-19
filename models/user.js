@@ -13,10 +13,6 @@ const userSchema = new Schema({
     password: String
 })
 
-// @see: http://mongoosejs.com/docs/models.html
-// -- Create our model class
-const ModelClass = mongoose.model('user', userSchema);
-
 // @see: http://mongoosejs.com/docs/middleware.html#order
 // -- On Save Hook, encrypt password
 
@@ -35,6 +31,18 @@ userSchema.pre('save', function(next) {
     })
   });
 
+userSchema.methods.comparePassword = (candidatePassword, callback) => {
+    bcrypt.compare(candidatePassword, this.password, (err, isMatch) => {
+        if (err) { return callback(err) }
+
+        callback(null, isMatch)
+    })
+}
+
+
+// @see: http://mongoosejs.com/docs/models.html
+// -- Create our model class
+const ModelClass = mongoose.model('user', userSchema);
 
 // -- Export our model
 module.exports = ModelClass

@@ -43,6 +43,18 @@ const localLogin = new LocalStrategy(localOptions, (email, password, done) => {
             done(null, false)
         } else {
             // compare passwords - Is password equal to user.password
+            // @see: https://www.npmjs.com/package/bcrypt#to-check-a-password
+            // When saving a password on signing up:
+            // [salt] + [plain password] = [Salt + Hashed Password]
+            // When comparing password on signing in: NO DECRYPTION!!!
+            // We check if:
+            // [Salt] + [Submitted Password] = [Hashed Password]
+            User.comparePassword(password, (err, isMatch) => {
+                if(err) { return done(err) }
+                if(!isMatch) { return done(null, false) }
+
+                return done(null, user)
+            })
             done(null, false) 
         }
     })
@@ -83,5 +95,6 @@ const jwtLogin = new JwtStrategy(jwtOptions, (payload, done) => {
 })
 
 
-// Tell passport to use this strategy
+// Tell passport to use these strategies
 passport.use(jwtLogin)
+passport.use(localLogin)
