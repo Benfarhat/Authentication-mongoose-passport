@@ -1,4 +1,16 @@
+const jwt = require('jwt-simple')
 const User = require('../models/user')
+const config = require('../config')
+
+function tokenForUser(user){
+    // @see: https://tools.ietf.org/html/rfc7519
+    const timestamp = new Date().getTime()
+    // -- Payload / "Charge utile":
+    // ---- sub for subject (mean who is this talking about)
+    //          We use "id" instead of "email", because "email" can be changed at anytime.
+    // ---- iat is another convention of jwt which mean "issued at" time
+    return jwt.encode({ sub: user.id, iat: timestamp }, config.secret)
+}
 
 exports.signup = (req, res, next) => {
     const email = req.body.email
@@ -26,7 +38,7 @@ exports.signup = (req, res, next) => {
             if(err) { return next(err) }
             // Respond to request indicagting the user was created
             // res.json(user)
-            res.json({ success: true })
+            res.json({ token: tokenForUser(user) })
         })
     })
     
